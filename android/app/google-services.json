@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "948920803282",
+    "project_id": "app-sale-ticket",
+    "storage_bucket": "app-sale-ticket.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:948920803282:android:59d5c52a2b09f35ff9720b",
+        "android_client_info": {
+          "package_name": "com.iglesiamt.appsaleticket"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFNc-9Y5JmzAXhDh1Igej_rmKpHbwgCJw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
