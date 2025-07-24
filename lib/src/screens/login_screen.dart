@@ -14,9 +14,14 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   String error = '';
+  bool loading = false;
 
   Future<void> login() async {
     try {
+      setState(() {
+        loading = true;
+      });
+      await Future.delayed(Duration(seconds: 5));
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
@@ -26,18 +31,22 @@ class _LoginScreenState extends State<LoginScreen> {
       if (e.code == 'user-not-found') {
         setState(() {
           error = 'Correo electrónico no registrado';
+          loading = false;
         });
       } else if (e.code == 'invalid-email') {
         setState(() {
           error = 'Correo electrónico invalido';
+          loading = false;
         });
       } else if (e.code == 'wrong-password') {
         setState(() {
           error = 'Contraseña incorrecta';
+          loading = false;
         });
       } else {
         setState(() {
           error = e.message ?? 'Login error';
+          loading = false;
         });
       }
     }
@@ -53,12 +62,23 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Iniciar sesión'),
+                const Text(
+                  'Iniciar sesión',
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
                 TextField(
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                    ),
-                    controller: _emailController),
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                  ),
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                ),
                 const SizedBox(
                   height: 8,
                 ),
@@ -71,7 +91,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                ElevatedButton(onPressed: login, child: const Text('Ingresar')),
+                if (loading == false)
+                  ElevatedButton(
+                      onPressed: login, child: const Text('Ingresar'))
+                else
+                  const Center(
+                    child: CircularProgressIndicator(),
+                  ),
                 if (error.isNotEmpty)
                   const SizedBox(
                     height: 15,
