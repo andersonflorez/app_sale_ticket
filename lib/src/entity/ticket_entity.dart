@@ -3,14 +3,14 @@ import 'package:app_sale_tickets/src/entity/locality_entity.dart';
 class TicketEntity {
   String id;
   final String name;
-  final String email;
+  String email;
   final String phone;
-  final String leader;
   final String document;
   DateTime dateSale;
   final LocalityEntity locality;
-
   final String seat;
+  final bool used;
+  final DateTime? dateUsed;
 
   TicketEntity({
     this.id = '',
@@ -18,21 +18,24 @@ class TicketEntity {
     required this.email,
     required this.phone,
     required this.seat,
-    required this.leader,
     required this.document,
     required this.locality,
     required this.dateSale,
+    this.used = false,
+    this.dateUsed,
   });
 
   Map<String, dynamic> toMap() => {
+        'id': id,
         'name': name,
         'email': email,
         'phone': phone,
-        'leader': leader,
         'document': document,
         'dateSale': dateSale.toIso8601String(),
         'locality': locality.toMap(),
         'seat': seat,
+        'used': used,
+        'dateUsed': dateUsed?.toIso8601String(),
       };
 
   factory TicketEntity.fromMap(String id, Map<String, dynamic> map) =>
@@ -41,11 +44,14 @@ class TicketEntity {
         name: map['name'],
         email: map['email'],
         phone: map['phone'],
-        leader: map['leader'],
         document: map['document'],
         dateSale: DateTime.parse(map['dateSale']),
         locality: LocalityEntity.fromMap(
-            (map['locality'] as Map)['id'], map['locality']),
+          map['locality'],
+        ),
         seat: map['seat'],
+        used: map['used'] ?? false,
+        dateUsed:
+            map['dateUsed'] == null ? null : DateTime.parse(map['dateUsed']),
       );
 }

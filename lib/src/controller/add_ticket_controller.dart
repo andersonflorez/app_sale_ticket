@@ -1,12 +1,10 @@
 import 'package:app_sale_tickets/src/entity/locality_entity.dart';
 import 'package:app_sale_tickets/src/entity/ticket_entity.dart';
-import 'package:app_sale_tickets/src/repository/firestore_repository.dart';
+import 'package:app_sale_tickets/src/repository/add_sale_ticket_firestore_repository.dart';
 import 'package:flutter/material.dart';
 
 class AddTicketController extends ChangeNotifier {
-  final FirestoreRepository repository;
-
-  TicketEntity? ticket;
+  final AddSaleTicketFirestoreRepository repository;
 
   List<LocalityEntity> localities = [];
   List<String> reservedSeats = [];
@@ -15,11 +13,11 @@ class AddTicketController extends ChangeNotifier {
 
   AddTicketController({required this.repository});
 
-  Future<String> saveTicket() async {
-    if (ticket != null) {
+  Future<String> saveTicket(List<TicketEntity> tickets) async {
+    if (tickets.isNotEmpty) {
       isLoading = true;
       notifyListeners();
-      final result = await repository.addSale(ticket!);
+      final result = await repository.addSale(tickets);
       isLoading = false;
       notifyListeners();
       return result;
@@ -34,5 +32,10 @@ class AddTicketController extends ChangeNotifier {
     localities = await repository.fetchLocalities();
     isLoading = false;
     notifyListeners();
+  }
+
+  Future<String> updateTicketEmail(TicketEntity ticket, String newEmail) async {
+    ticket.email = newEmail;
+    return await repository.updateTicketEmail(ticket);
   }
 }

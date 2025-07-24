@@ -1,12 +1,12 @@
 import 'package:app_sale_tickets/src/controller/add_ticket_controller.dart';
-import 'package:app_sale_tickets/src/entity/locality_entity.dart';
+import 'package:app_sale_tickets/src/entity/seat_locality_entity.dart';
 import 'package:app_sale_tickets/src/entity/ticket_entity.dart';
 import 'package:app_sale_tickets/src/widgets/adaptive_screens_widget.dart';
-import 'package:app_sale_tickets/src/widgets/locality_select_widget.dart';
+import 'package:app_sale_tickets/src/widgets/navigation_tabs_widget.dart';
 import 'package:app_sale_tickets/src/widgets/seat_selector_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 class SeatSaleFormScreen extends StatefulWidget {
   const SeatSaleFormScreen({super.key});
@@ -19,19 +19,16 @@ class _SeatSaleFormScreenState extends State<SeatSaleFormScreen> {
   String name = '';
   String email = '';
   String phone = '';
-  String seat = '';
-  String leader = '';
+  List<SeatLocalityEntity> seats = [];
   String document = '';
-  LocalityEntity? locality;
   int price = 0;
-
-  final uuid = Uuid();
-
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
-    context.read<AddTicketController>().loadLocalities();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AddTicketController>().loadLocalities();
+    });
     super.initState();
   }
 
@@ -51,7 +48,9 @@ class _SeatSaleFormScreenState extends State<SeatSaleFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Registro de Venta de Asientos')),
+      appBar: AppBar(
+        title: const Text('Registro de Venta de Asientos'),
+      ),
       body: Consumer<AddTicketController>(
         builder: (context, addTicketController, child) {
           return addTicketController.isLoading
@@ -67,6 +66,11 @@ class _SeatSaleFormScreenState extends State<SeatSaleFormScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                const NavigationTabsWidget(),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                const Divider(),
                                 const Text(
                                   'Datos personales',
                                   style: TextStyle(
@@ -79,7 +83,9 @@ class _SeatSaleFormScreenState extends State<SeatSaleFormScreen> {
                                   decoration: const InputDecoration(
                                     labelText: 'Nombre',
                                   ),
-                                  onChanged: (value) => name = value,
+                                  onChanged: (value) => setState(() {
+                                    name = value;
+                                  }),
                                   validator: (value) =>
                                       value == null || value.isEmpty
                                           ? 'Campo requerido'
@@ -92,7 +98,9 @@ class _SeatSaleFormScreenState extends State<SeatSaleFormScreen> {
                                   ),
                                   keyboardType: TextInputType.number,
                                   onChanged: (value) {
-                                    document = value;
+                                    setState(() {
+                                      document = value;
+                                    });
                                   },
                                   validator: _validateNumber,
                                 ),
@@ -102,7 +110,9 @@ class _SeatSaleFormScreenState extends State<SeatSaleFormScreen> {
                                       const InputDecoration(labelText: 'Email'),
                                   keyboardType: TextInputType.emailAddress,
                                   onChanged: (value) {
-                                    email = value;
+                                    setState(() {
+                                      email = value;
+                                    });
                                   },
                                   validator: _validateEmail,
                                 ),
@@ -113,30 +123,11 @@ class _SeatSaleFormScreenState extends State<SeatSaleFormScreen> {
                                   ),
                                   keyboardType: TextInputType.number,
                                   onChanged: (value) {
-                                    phone = value;
-                                  },
-                                  validator: _validateNumber,
-                                ),
-                                const SizedBox(height: 8),
-                                TextFormField(
-                                  decoration:
-                                      const InputDecoration(labelText: 'Líder'),
-                                  onChanged: (value) => leader = value,
-                                  validator: (value) =>
-                                      value == null || value.isEmpty
-                                          ? 'Campo requerido'
-                                          : null,
-                                ),
-                                const SizedBox(height: 16),
-                                const Text('Localidad:'),
-                                const SizedBox(height: 8),
-                                LocalitySelectWidget(
-                                  onLocalitySelected: (value) {
                                     setState(() {
-                                      locality = value;
+                                      phone = value;
                                     });
                                   },
-                                  locality: locality,
+                                  validator: _validateNumber,
                                 ),
                                 const SizedBox(height: 24),
                                 const Text(
@@ -155,10 +146,12 @@ class _SeatSaleFormScreenState extends State<SeatSaleFormScreen> {
                             child: SeatSelectorWidget(
                               onSeatSelected: (value) {
                                 setState(() {
-                                  seat = value;
+                                  seats = value;
                                 });
                               },
-                              reservedSeats: addTicketController.reservedSeats,
+                              localitiesPrice: context
+                                  .read<AddTicketController>()
+                                  .localities,
                             ),
                           ),
                           AdaptiveScreensWidget(
@@ -166,43 +159,107 @@ class _SeatSaleFormScreenState extends State<SeatSaleFormScreen> {
                               children: [
                                 const SizedBox(height: 24),
                                 ElevatedButton(
-                                  onPressed: seat.isNotEmpty &&
+                                  onPressed: seats.isNotEmpty &&
                                           _formKey.currentState?.validate() ==
-                                              true &&
-                                          locality != null
-                                      ? () async {
-                                          addTicketController.ticket =
+                                              true
+                                      ? () {
+                                          final List<TicketEntity> tickets = [];
+                                          double total = 0;
+                                          seats.forEach((seat) {
+                                            total += seat.locality.price;
+                                            tickets.add(
                                               TicketEntity(
-                                            name: name,
-                                            email: email,
-                                            phone: phone,
-                                            seat: seat,
-                                            leader: leader,
-                                            document: document,
-                                            locality: locality!,
-                                            dateSale: DateTime.now(),
-                                          );
-                                          addTicketController
-                                              .saveTicket()
-                                              .then((value) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(value),
+                                                name: name,
+                                                email: email,
+                                                phone: phone,
+                                                seat: seat.seat,
+                                                document: document,
+                                                locality: seat.locality,
+                                                dateSale: DateTime.now(),
                                               ),
                                             );
-                                            setState(() {
-                                              name = '';
-                                              email = '';
-                                              phone = '';
-                                              seat = '';
-                                              leader = '';
-                                              document = '';
-                                              locality = null;
-                                              seat = '';
-                                            });
-                                            _formKey.currentState?.reset();
                                           });
+
+                                          showDialog(
+                                            context: context,
+                                            barrierDismissible:
+                                                false, // evita cerrar tocando fuera del cuadro
+                                            builder: (BuildContext context) {
+                                              final formatMoney =
+                                                  NumberFormat(
+                                                      '#,##0', 'es_CO');
+                                              return AlertDialog(
+                                                title: const Text(
+                                                    'Confirmar Reserva'),
+                                                content: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    const Text(
+                                                        'Sillas seleccionadas:'),
+                                                    Wrap(
+                                                      spacing: 8.0,
+                                                      runSpacing: 8.0,
+                                                      children: seats
+                                                          .map((seat) => Chip(
+                                                              label: Text(
+                                                                  seat.seat)))
+                                                          .toList(),
+                                                    ),
+                                                    const SizedBox(height: 12),
+                                                    Text(
+                                                        'Total donación: \$${formatMoney.format(total)}',
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                  ],
+                                                ),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    child:
+                                                        const Text('Cancelar'),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                  ),
+                                                  ElevatedButton(
+                                                    child:
+                                                        const Text('Continuar'),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+
+                                                      addTicketController
+                                                          .saveTicket(tickets)
+                                                          .then((value) {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                          SnackBar(
+                                                            content:
+                                                                Text(value),
+                                                          ),
+                                                        );
+                                                        setState(() {
+                                                          name = '';
+                                                          email = '';
+                                                          phone = '';
+                                                          document = '';
+                                                          seats = [];
+                                                        });
+                                                        _formKey.currentState
+                                                            ?.reset();
+                                                      });
+                                                    },
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
                                         }
                                       : null,
                                   child: const Text('Guardar'),
