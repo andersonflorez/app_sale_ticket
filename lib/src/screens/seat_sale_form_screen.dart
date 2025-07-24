@@ -5,6 +5,7 @@ import 'package:app_sale_tickets/src/widgets/adaptive_screens_widget.dart';
 import 'package:app_sale_tickets/src/widgets/navigation_tabs_widget.dart';
 import 'package:app_sale_tickets/src/widgets/seat_selector_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -52,7 +53,7 @@ class _SeatSaleFormScreenState extends State<SeatSaleFormScreen> {
         title: const Text('Registro de Venta de Asientos'),
       ),
       body: Consumer<AddTicketController>(
-        builder: (context, addTicketController, child) {
+        builder: (contextParent, addTicketController, child) {
           return addTicketController.isLoading
               ? const Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
@@ -62,14 +63,14 @@ class _SeatSaleFormScreenState extends State<SeatSaleFormScreen> {
                       key: _formKey,
                       child: Column(
                         children: [
+                          const NavigationTabsWidget(),
+                          const SizedBox(
+                            height: 8,
+                          ),
                           AdaptiveScreensWidget(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const NavigationTabsWidget(),
-                                const SizedBox(
-                                  height: 8,
-                                ),
                                 const Divider(),
                                 const Text(
                                   'Datos personales',
@@ -154,119 +155,8 @@ class _SeatSaleFormScreenState extends State<SeatSaleFormScreen> {
                                   .localities,
                             ),
                           ),
-                          AdaptiveScreensWidget(
-                            child: Column(
-                              children: [
-                                const SizedBox(height: 24),
-                                ElevatedButton(
-                                  onPressed: seats.isNotEmpty &&
-                                          _formKey.currentState?.validate() ==
-                                              true
-                                      ? () {
-                                          final List<TicketEntity> tickets = [];
-                                          double total = 0;
-                                          seats.forEach((seat) {
-                                            total += seat.locality.price;
-                                            tickets.add(
-                                              TicketEntity(
-                                                name: name,
-                                                email: email,
-                                                phone: phone,
-                                                seat: seat.seat,
-                                                document: document,
-                                                locality: seat.locality,
-                                                dateSale: DateTime.now(),
-                                              ),
-                                            );
-                                          });
-
-                                          showDialog(
-                                            context: context,
-                                            barrierDismissible:
-                                                false, // evita cerrar tocando fuera del cuadro
-                                            builder: (BuildContext context) {
-                                              final formatMoney =
-                                                  NumberFormat(
-                                                      '#,##0', 'es_CO');
-                                              return AlertDialog(
-                                                title: const Text(
-                                                    'Confirmar Reserva'),
-                                                content: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    const Text(
-                                                        'Sillas seleccionadas:'),
-                                                    Wrap(
-                                                      spacing: 8.0,
-                                                      runSpacing: 8.0,
-                                                      children: seats
-                                                          .map((seat) => Chip(
-                                                              label: Text(
-                                                                  seat.seat)))
-                                                          .toList(),
-                                                    ),
-                                                    const SizedBox(height: 12),
-                                                    Text(
-                                                        'Total donación: \$${formatMoney.format(total)}',
-                                                        style: const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold)),
-                                                  ],
-                                                ),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    child:
-                                                        const Text('Cancelar'),
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                  ),
-                                                  ElevatedButton(
-                                                    child:
-                                                        const Text('Continuar'),
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-
-                                                      addTicketController
-                                                          .saveTicket(tickets)
-                                                          .then((value) {
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                          SnackBar(
-                                                            content:
-                                                                Text(value),
-                                                          ),
-                                                        );
-                                                        setState(() {
-                                                          name = '';
-                                                          email = '';
-                                                          phone = '';
-                                                          document = '';
-                                                          seats = [];
-                                                        });
-                                                        _formKey.currentState
-                                                            ?.reset();
-                                                      });
-                                                    },
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        }
-                                      : null,
-                                  child: const Text('Guardar'),
-                                ),
-                              ],
-                            ),
-                          ),
+                          const SizedBox(height: 24),
+                          buttonSaveTicket(contextParent, addTicketController),
                           const SizedBox(
                             height: 10,
                           ),
@@ -277,6 +167,113 @@ class _SeatSaleFormScreenState extends State<SeatSaleFormScreen> {
                 );
         },
       ),
+    );
+  }
+
+  ElevatedButton buttonSaveTicket(
+      BuildContext contextParent, AddTicketController addTicketController) {
+    return ElevatedButton(
+      onPressed: seats.isNotEmpty && _formKey.currentState?.validate() == true
+          ? () {
+              final List<TicketEntity> tickets = [];
+              double total = 0;
+              seats.forEach((seat) {
+                total += seat.locality.price;
+                tickets.add(
+                  TicketEntity(
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    seat: seat.seat,
+                    document: document,
+                    locality: seat.locality,
+                    dateSale: DateTime.now(),
+                  ),
+                );
+              });
+
+              showDialog(
+                context: contextParent,
+                barrierDismissible:
+                    false, // evita cerrar tocando fuera del cuadro
+                builder: (BuildContext context) {
+                  final formatMoney = NumberFormat('#,##0', 'es_CO');
+                  return AlertDialog(
+                    title: const Text('Confirmar Reserva'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Sillas seleccionadas:'),
+                        Wrap(
+                          spacing: 8.0,
+                          runSpacing: 8.0,
+                          children: seats
+                              .map((seat) => Chip(
+                                  side: const BorderSide(color: Colors.grey),
+                                  label: Text(seat.seat)))
+                              .toList(),
+                        ),
+                        const SizedBox(height: 12),
+                        Text('Total donación: \$${formatMoney.format(total)}',
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('Cancelar'),
+                        onPressed: () {
+                          GoRouter.of(context).pop();
+                        },
+                      ),
+                      ElevatedButton(
+                        child: const Text('Continuar'),
+                        onPressed: () {
+                          GoRouter.of(context).pop();
+
+                          addTicketController.saveTicket(tickets).then((value) {
+                            showDialog(
+                              context: contextParent,
+                              builder: (BuildContext context) => Dialog(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(value),
+                                      const SizedBox(height: 15),
+                                      TextButton(
+                                        onPressed: () {
+                                          GoRouter.of(context).pop(context);
+                                        },
+                                        child: const Text('Cerrar'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+
+                            setState(() {
+                              name = '';
+                              email = '';
+                              phone = '';
+                              document = '';
+                              seats = [];
+                            });
+                            _formKey.currentState?.reset();
+                          });
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
+          : null,
+      child: const Text('Guardar'),
     );
   }
 }

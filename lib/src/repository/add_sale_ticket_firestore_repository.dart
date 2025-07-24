@@ -131,7 +131,7 @@ class AddSaleTicketFirestoreRepository {
 
   Future<Uint8List> generatePDF(List<TicketEntity> tickets) async {
     final pdf = pw.Document();
-    final ByteData data = await rootBundle.load('assets/banner.jpeg');
+    final ByteData data = await rootBundle.load('assets/banner.jpg');
     final Uint8List bannerBytes = data.buffer.asUint8List();
     for (final ticket in tickets) {
       //Generate QR

@@ -136,8 +136,8 @@ class _SeatSelectorWidgetState extends State<SeatSelectorWidget> {
                               isSelected: selectedSeat.indexWhere((selected) =>
                                       selected.seat == seatLocality.seat) !=
                                   -1,
-                              isReserved: controller.tickets.any(
-                                  (ticket) => ticket.seat.contains(seatId)),
+                              isReserved: controller.tickets
+                                  .any((ticket) => ticket.seat == seatId),
                             ),
                           ),
                         );

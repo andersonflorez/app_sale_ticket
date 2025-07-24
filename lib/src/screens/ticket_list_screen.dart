@@ -211,6 +211,7 @@ class _TicketListScreenState extends State<TicketListScreen> {
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            SelectableText('ID: ${ticket.id}'),
                             Text('Correo: ${ticket.email}'),
                             Text('Documento: ${ticket.document}'),
                             Text('Silla: ${ticket.seat}'),

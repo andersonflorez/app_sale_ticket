@@ -50,6 +50,9 @@ class NavigationTabsWidget extends StatelessWidget {
             },
             child: const Text('Reportes'),
           ),
+          const SizedBox(
+            width: 5,
+          ),
           ElevatedButton(
             onPressed: () async {
               await FirebaseAuth.instance.signOut();

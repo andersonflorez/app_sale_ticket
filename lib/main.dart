@@ -8,6 +8,7 @@ import 'package:app_sale_tickets/src/repository/listen_tickets_firestore_reposit
 import 'package:app_sale_tickets/src/repository/reports_repository.dart';
 import 'package:app_sale_tickets/src/repository/scanner_qr_repository.dart';
 import 'package:app_sale_tickets/src/utils/router.dart';
+import 'package:app_sale_tickets/src/utils/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +52,7 @@ class MainApp extends StatelessWidget {
       child: MaterialApp.router(
         routerConfig: router,
         title: 'Iglesia Misión Trasformadora',
-        theme: ThemeData(primarySwatch: Colors.blue),
+        theme: customTheme,
       ),
     );
   }
