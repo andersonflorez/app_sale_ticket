@@ -108,37 +108,41 @@ class _SeatSelectorWidgetState extends State<SeatSelectorWidget> {
                           seat: seatId,
                           locality: locality,
                         );
-
+                        final indexTicketReserved = controller.tickets
+                            .indexWhere((ticket) => ticket.seat == seatId);
                         rowsChildren.add(
                           Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: padding),
                             child: SeatWidget(
-                              onSeatSelected: widget.onSeatSelected == null
-                                  ? null
-                                  : (value) {
-                                      setState(() {
-                                        if (selectedSeat.indexWhere(
+                                onSeatSelected: widget.onSeatSelected == null
+                                    ? null
+                                    : (value) {
+                                        setState(() {
+                                          if (selectedSeat.indexWhere(
+                                                  (selected) =>
+                                                      selected.seat ==
+                                                      seatLocality.seat) !=
+                                              -1) {
+                                            selectedSeat.removeWhere(
                                                 (selected) =>
                                                     selected.seat ==
-                                                    seatLocality.seat) !=
-                                            -1) {
-                                          selectedSeat.removeWhere((selected) =>
-                                              selected.seat ==
-                                              seatLocality.seat);
-                                        } else {
-                                          selectedSeat.add(value);
-                                        }
-                                      });
-                                      widget.onSeatSelected!(selectedSeat);
-                                    },
-                              seat: seatLocality,
-                              isSelected: selectedSeat.indexWhere((selected) =>
-                                      selected.seat == seatLocality.seat) !=
-                                  -1,
-                              isReserved: controller.tickets
-                                  .any((ticket) => ticket.seat == seatId),
-                            ),
+                                                    seatLocality.seat);
+                                          } else {
+                                            selectedSeat.add(value);
+                                          }
+                                        });
+                                        widget.onSeatSelected!(selectedSeat);
+                                      },
+                                seat: seatLocality,
+                                isSelected: selectedSeat.indexWhere(
+                                        (selected) =>
+                                            selected.seat ==
+                                            seatLocality.seat) !=
+                                    -1,
+                                ticketReserved: indexTicketReserved == -1
+                                    ? null
+                                    : controller.tickets[indexTicketReserved]),
                           ),
                         );
                         if ((letter['space'] as List).contains(seatIdx)) {

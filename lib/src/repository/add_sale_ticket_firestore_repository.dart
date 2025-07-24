@@ -45,9 +45,9 @@ class AddSaleTicketFirestoreRepository {
     try {
       await sendPdfByEmail(ticketsReserved);
       if (reservedAllSeat) {
-        return 'Silla registrada correctamente';
+        return 'Se ha realizado la reserva y se ha enviado el correo';
       } else {
-        return 'Error al reservar todas las sillas, sillas no disponibles: ${seatNotAvailable.join(' - ')}';
+        return 'Error al reservar todas las sillas, sillas no disponibles: ${seatNotAvailable.join(' - ')}, con el resto de las sillas se envió el correo electrónico';
       }
     } catch (e) {
       if (reservedAllSeat) {
