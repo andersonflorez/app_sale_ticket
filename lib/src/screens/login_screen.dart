@@ -21,7 +21,6 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         loading = true;
       });
-      await Future.delayed(Duration(seconds: 5));
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
