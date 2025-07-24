@@ -83,7 +83,7 @@ class AddSaleTicketFirestoreRepository {
       await sendMail(
           email: tickets.first.email,
           pdfBytes: pdf,
-          fileName: 'Ticket Jose Ordóñez - ${tickets.first.name}.pdf');
+          fileName: 'Ticket José Ordóñez - ${tickets.first.name}.pdf');
     } catch (e) {
       throw 'Correo no enviado';
     }

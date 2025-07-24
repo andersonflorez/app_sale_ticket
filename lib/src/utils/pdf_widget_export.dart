@@ -35,7 +35,7 @@ pw.Widget buildTicketPdfWidget({
       ),
       pw.SizedBox(height: 10),
       pw.Text(
-        'NO HAGAS COPIAS DE ESTA ENTRADA, SOLAMENTE EL PRIMERO EN PASAR POR NUESTROS LECTORES TENDRÁ ACCESO AL EVENTO',
+        'NO HAGAS COPIA DE TU ENTRADA Y NO LA ENVÍES A OTRA PERSONA, UNA VEZ EL CÓDIGO PASE POR NUESTROS LECTORES, SERÁ INHABILITADO PARA NUEVOS INGRESOS.',
         style: const pw.TextStyle(fontSize: 9),
       ),
       pw.SizedBox(height: 10),
@@ -48,7 +48,7 @@ pw.Widget buildTicketPdfWidget({
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
                 pw.Text(
-                  'JOSE ORDÓÑEZ',
+                  'JOSÉ ORDÓÑEZ',
                   style: pw.TextStyle(
                     fontSize: 22,
                     fontWeight: pw.FontWeight.bold,
@@ -129,10 +129,10 @@ pw.Widget buildTicketPdfWidget({
       ),
       pw.SizedBox(height: 15),
       pw.Text(
-        '1. Edad minima de ingreso al evento es 10 años.',
+        '1. La edad mínima de ingreso al evento es 10 años.',
       ),
       pw.Text(
-        '2. No esta permitido el ingreso de mascotas al evento.',
+        '2. No está permitido el ingreso de mascotas al evento.',
       ),
       pw.Text(
         '3. Presenta tu boleta legible (física o digital). Recuerda que es personal e intransferible.',
@@ -153,7 +153,13 @@ pw.Widget buildTicketPdfWidget({
         '8.	Lee los Términos y Condiciones que se encuentra junto con la boleta.',
       ),
       pw.Text(
-        '9.	Si tienes alguna dudo o inquietud puedes escribir a presidencia@iglesiamt.com',
+        '9.	Si tienes alguna duda o inquietud puedes escribir a presidencia@iglesiamt.com',
+      ),
+      pw.Text(
+        '10. No está permitido el ingreso de bebidas y alimentos.',
+      ),
+      pw.Text(
+        '11. No se permite el ingreso de bebidas alcohólicas ni de sustancias psicoactivas.',
       ),
     ],
   );
@@ -283,7 +289,7 @@ List<pw.Widget> buildTermsAndCondition() {
     ),
     pw.SizedBox(height: 8),
     pw.Text(
-      'Es el formulario con los datos que el donante debe proporcionar en taquilla para la Iglesia con el fin de acceder al evento. Allí proporciona sus datos personales y manifiesta su intención de donar. Los datos del donante serán tratados de conformidad con la Ley 1581 de 2012, y demás normas que lo reglamenten o adicionen, para recibir información del evento al que desea asistir, y futuros eventos que la Iglesia lleve a cabo, el donante podrá ejercer sus derechos sobre el tratamiento, uso, circulación, recolección, almacenamiento y supresión de sus datos en todo momento y para ello, podrá escribir al correo juridica@iglesiamt.com\n\nNota legal: Según la ley colombiana, este formulario constituye una oferta de donación.',
+      'Es el formulario con los datos que el donante debe proporcionar en la taquilla de la Iglesia con el fin de acceder al evento. Allí proporciona sus datos personales y manifiesta su intención de donar. Los datos del donante serán tratados de conformidad con la Ley 1581 de 2012, y demás normas que lo reglamenten o adicionen, para recibir información del evento al que desea asistir, y futuros eventos que la Iglesia lleve a cabo, el donante podrá ejercer sus derechos sobre el tratamiento, uso, circulación, recolección, almacenamiento y supresión de sus datos en todo momento y para ello, podrá escribir al correo juridica@iglesiamt.com\n\nNota legal: Según la ley colombiana, este formulario constituye una oferta de donación.',
       textAlign: pw.TextAlign.justify,
     ),
     pw.SizedBox(height: 15),
@@ -322,7 +328,7 @@ List<pw.Widget> buildTermsAndCondition() {
     ),
     pw.SizedBox(height: 8),
     pw.Text(
-      'EL único lugar destinado para la donación es la taquilla del teatro IMT\n\n- Diligencia el formulario. Incluye tus datos personales, valor, concepto, medio de pago y si requieres certificado.\n- Lee y acepta los términos y condiciones.\n- Autoriza el tratamiento de tus datos personales, para los fines anteriormente mencionados.\n- Realiza la donación.',
+      'El único lugar destinado para la donación es la taquilla del teatro IMT\n\n- Diligencia el formulario. Incluye tus datos personales, valor, concepto, medio de pago y si requieres certificado.\n- Lee y acepta los términos y condiciones.\n- Autoriza el tratamiento de tus datos personales, para los fines anteriormente mencionados.\n- Realiza la donación.',
       textAlign: pw.TextAlign.justify,
     ),
     pw.SizedBox(height: 15),
