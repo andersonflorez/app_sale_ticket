@@ -18,7 +18,7 @@ final GoRouter router = GoRouter(
     }
 
     if (user != null && loggingIn) {
-      return '/home';
+      return '/';
     }
 
     return null;
@@ -29,7 +29,7 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const LoginScreen(),
     ),
     GoRoute(
-      path: '/home',
+      path: '/',
       builder: (context, state) => const SeatSaleFormScreen(),
     ),
     GoRoute(
