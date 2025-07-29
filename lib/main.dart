@@ -1,11 +1,11 @@
 import 'package:app_sale_tickets/firebase_options.dart';
 import 'package:app_sale_tickets/src/controller/add_ticket_controller.dart';
-import 'package:app_sale_tickets/src/controller/reports_controller.dart';
+import 'package:app_sale_tickets/src/controller/export_controller.dart';
 import 'package:app_sale_tickets/src/controller/scanner_qr_controller.dart';
 import 'package:app_sale_tickets/src/controller/ticket_list_controller.dart';
 import 'package:app_sale_tickets/src/repository/add_sale_ticket_firestore_repository.dart';
+import 'package:app_sale_tickets/src/repository/export_repository.dart';
 import 'package:app_sale_tickets/src/repository/listen_tickets_firestore_repository.dart';
-import 'package:app_sale_tickets/src/repository/reports_repository.dart';
 import 'package:app_sale_tickets/src/repository/scanner_qr_repository.dart';
 import 'package:app_sale_tickets/src/utils/router.dart';
 import 'package:app_sale_tickets/src/utils/theme.dart';
@@ -44,8 +44,8 @@ class MainApp extends StatelessWidget {
           ),
         ),
         ChangeNotifierProvider(
-          create: (_) => ReportsController(
-            repository: ReportsRepository(),
+          create: (_) => ExportController(
+            repository: ExportRepository(),
           ),
         ),
       ],

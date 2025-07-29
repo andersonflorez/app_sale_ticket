@@ -1,6 +1,5 @@
 import 'package:app_sale_tickets/src/screens/login_screen.dart';
 import 'package:app_sale_tickets/src/screens/map_tickets_seat_screen.dart';
-import 'package:app_sale_tickets/src/screens/reports_screen.dart';
 import 'package:app_sale_tickets/src/screens/scanner_qr_screen.dart';
 import 'package:app_sale_tickets/src/screens/seat_sale_form_screen.dart';
 import 'package:app_sale_tickets/src/screens/ticket_list_screen.dart';
@@ -39,10 +38,6 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/ticketMap',
       builder: (context, state) => const MapTicketsSeatScreen(),
-    ),
-    GoRoute(
-      path: '/reports',
-      builder: (context, state) => const ReportsScreen(),
     ),
     GoRoute(
       path: '/scannerQr',

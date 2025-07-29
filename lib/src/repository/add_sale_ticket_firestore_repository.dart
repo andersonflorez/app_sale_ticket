@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:ui' as ui;
-
 import 'package:app_sale_tickets/src/entity/locality_entity.dart';
 import 'package:app_sale_tickets/src/entity/ticket_entity.dart';
 import 'package:app_sale_tickets/src/utils/pdf_widget_export.dart';
@@ -89,10 +88,12 @@ class AddSaleTicketFirestoreRepository {
     }
   }
 
-  /* void downloadFileFromUint8List(Uint8List data, String filename) {
+  /*void downloadFileFromUint8List(Uint8List data, String filename) {
     final blob = html.Blob([data], 'application/pdf');
     final url = html.Url.createObjectUrlFromBlob(blob);
-    html.Url.revokeObjectUrl(url);
+    final html.AnchorElement anchorElement = html.AnchorElement(href: url);
+    anchorElement.download = url;
+    anchorElement.click();
   }*/
 
   Future<void> sendMail({
@@ -131,6 +132,18 @@ class AddSaleTicketFirestoreRepository {
 
   Future<Uint8List> generatePDF(List<TicketEntity> tickets) async {
     final pdf = pw.Document();
+    final fontRegular = pw.Font.ttf(await rootBundle
+        .load('assets/fonts/SpaceGrotesk/SpaceGrotesk-Regular.ttf')
+        .then((d) => d.buffer.asByteData()));
+    final fontBold = pw.Font.ttf(await rootBundle
+        .load('assets/fonts/SpaceGrotesk/SpaceGrotesk-Bold.ttf')
+        .then((d) => d.buffer.asByteData()));
+
+    final theme = pw.ThemeData.withFont(
+      base: fontRegular,
+      bold: fontBold,
+    );
+
     final ByteData data = await rootBundle.load('assets/banner.jpg');
     final Uint8List bannerBytes = data.buffer.asUint8List();
     for (final ticket in tickets) {
@@ -139,6 +152,7 @@ class AddSaleTicketFirestoreRepository {
 
       pdf.addPage(
         pw.Page(
+          theme: theme,
           pageFormat: PdfPageFormat.a4,
           build: (pw.Context context) {
             return buildTicketPdfWidget(
@@ -161,6 +175,7 @@ class AddSaleTicketFirestoreRepository {
 
     pdf.addPage(
       pw.MultiPage(
+        theme: theme,
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
           return buildTermsAndCondition();

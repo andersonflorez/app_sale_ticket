@@ -205,14 +205,20 @@ class _SeatSaleFormScreenState extends State<SeatSaleFormScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text('Sillas seleccionadas:'),
-                        Wrap(
-                          spacing: 8.0,
-                          runSpacing: 8.0,
-                          children: seats
-                              .map((seat) => Chip(
-                                  side: const BorderSide(color: Colors.grey),
-                                  label: Text(seat.seat)))
-                              .toList(),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxHeight: 450),
+                          child: SingleChildScrollView(
+                            child: Wrap(
+                              spacing: 8.0,
+                              runSpacing: 8.0,
+                              children: seats
+                                  .map((seat) => Chip(
+                                      side:
+                                          const BorderSide(color: Colors.grey),
+                                      label: Text(seat.seat)))
+                                  .toList(),
+                            ),
+                          ),
                         ),
                         const SizedBox(height: 12),
                         Text('Total donación: \$${formatMoney.format(total)}',
@@ -236,13 +242,20 @@ class _SeatSaleFormScreenState extends State<SeatSaleFormScreen> {
                             showDialog(
                               context: contextParent,
                               builder: (BuildContext context) => Dialog(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: 150,
+                                  padding: const EdgeInsets.all(20.0),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      Text(value),
+                                      Text(
+                                        value,
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                       const SizedBox(height: 15),
                                       TextButton(
                                         onPressed: () {

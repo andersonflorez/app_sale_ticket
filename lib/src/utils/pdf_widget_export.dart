@@ -59,8 +59,6 @@ pw.Widget buildTicketPdfWidget({
                   style: pw.TextStyle(
                     fontSize: 15,
                     fontWeight: pw.FontWeight.normal,
-                    letterSpacing: 0.6,
-                    wordSpacing: 0.6,
                   ),
                 ),
                 pw.SizedBox(height: 10),
@@ -70,22 +68,29 @@ pw.Widget buildTicketPdfWidget({
                     // Reemplaza por tus widgets de fecha y hora en pdf
                     dateEventPdfWidget(),
                     pw.Text(
-                      'Ingreso - 6:00 PM\nEvento - 7:00 PM',
+                      'Ingreso: 6:00 PM\nEvento: 7:00 PM',
                       style: const pw.TextStyle(fontSize: 15),
                     ),
                   ],
                 ),
-                pw.SizedBox(height: 20),
-                pw.Text(
-                  'Silla: $seat',
-                  style: pw.TextStyle(
-                    fontSize: 20,
-                    fontWeight: pw.FontWeight.bold,
-                    letterSpacing: 0.6,
+                pw.SizedBox(height: 10),
+                pw.Container(
+                  padding: const pw.EdgeInsets.all(10),
+                  decoration: pw.BoxDecoration(
+                      color: PdfColor.fromHex('000000'),
+                      borderRadius:
+                          const pw.BorderRadius.all(pw.Radius.circular(10))),
+                  child: pw.Text(
+                    'SILLA: $seat',
+                    style: pw.TextStyle(
+                      fontSize: 20,
+                      fontWeight: pw.FontWeight.bold,
+                      color: PdfColor.fromHex('FFFFFF'),
+                    ),
                   ),
                 ),
                 pw.Text(
-                  'Localidad: $locality',
+                  'LOCALIDAD: $locality',
                   style: pw.TextStyle(
                     fontSize: 20,
                     fontWeight: pw.FontWeight.bold,
@@ -93,18 +98,29 @@ pw.Widget buildTicketPdfWidget({
                     wordSpacing: 0.6,
                   ),
                 ),
-                pw.SizedBox(height: 20),
+                pw.SizedBox(height: 10),
                 pw.Text(
                   'Iglesia Misión Transformadora\nCalle 44 # 80 - 16',
                   style: const pw.TextStyle(fontSize: 15),
                 ),
-                pw.SizedBox(height: 20),
+                pw.UrlLink(
+                  destination: 'https://wa.me/573052421768',
+                  child: pw.Text(
+                    'WhatsApp: 3052421768',
+                    style: const pw.TextStyle(
+                      decoration: pw.TextDecoration.underline,
+                      color: PdfColors.blue,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                pw.SizedBox(height: 10),
                 pw.Divider(),
                 pw.SizedBox(height: 10),
                 pw.Text(
-                  'Donación: \$${formatMoney.format(price)}',
+                  'DONACIÓN: \$${formatMoney.format(price)}',
                   style: pw.TextStyle(
-                    fontSize: 20,
+                    fontSize: 13,
                     fontWeight: pw.FontWeight.bold,
                   ),
                 ),
@@ -127,7 +143,7 @@ pw.Widget buildTicketPdfWidget({
         'ORGANIZA: IGLESIA MISIÓN TRANSFORMADORA',
         style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
       ),
-      pw.SizedBox(height: 15),
+      pw.SizedBox(height: 10),
       pw.Text(
         '1. La edad mínima de ingreso al evento es 10 años.',
       ),
@@ -136,30 +152,57 @@ pw.Widget buildTicketPdfWidget({
       ),
       pw.Text(
         '3. Presenta tu boleta legible (física o digital). Recuerda que es personal e intransferible.',
+        style: const pw.TextStyle(
+          fontSize: 11,
+        ),
       ),
       pw.Text(
         '4.	La primera boleta que se valide anula copias. No compartas tu PDF ni QR.',
+        style: const pw.TextStyle(
+          fontSize: 11,
+        ),
       ),
       pw.Text(
         '5.	Dirígete a la ubicación seleccionada al momento de realizar la donación. El personal de Logística y Seguridad te direccionará hacia tu ubicación.',
+        style: const pw.TextStyle(
+          fontSize: 11,
+        ),
       ),
       pw.Text(
         '6.	NO ES PERMITIDO GRABAR NI TOMAR REGISTRO FOTOGRÁFICO DURANTE EL EVENTO.',
+        style: const pw.TextStyle(
+          fontSize: 11,
+        ),
       ),
       pw.Text(
         '7.	El personal de Logística y Seguridad puede negar el ingreso o solicitar tu retiro si no cumples las reglas del evento, sin lugar a a reembolso.',
+        style: const pw.TextStyle(
+          fontSize: 11,
+        ),
       ),
       pw.Text(
         '8.	Lee los Términos y Condiciones que se encuentra junto con la boleta.',
+        style: const pw.TextStyle(
+          fontSize: 11,
+        ),
       ),
       pw.Text(
         '9.	Si tienes alguna duda o inquietud puedes escribir a presidencia@iglesiamt.com',
+        style: const pw.TextStyle(
+          fontSize: 11,
+        ),
       ),
       pw.Text(
         '10. No está permitido el ingreso de bebidas y alimentos.',
+        style: const pw.TextStyle(
+          fontSize: 11,
+        ),
       ),
       pw.Text(
         '11. No se permite el ingreso de bebidas alcohólicas ni de sustancias psicoactivas.',
+        style: const pw.TextStyle(
+          fontSize: 11,
+        ),
       ),
     ],
   );

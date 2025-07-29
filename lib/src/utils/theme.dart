@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
 final ThemeData customTheme = ThemeData(
+  fontFamily: 'SpaceGrotesk', // Usa esta fuente en toda la app
+  textTheme: const TextTheme(
+    bodyLarge: TextStyle(fontWeight: FontWeight.w400),
+    bodyMedium: TextStyle(fontWeight: FontWeight.w400),
+    titleLarge: TextStyle(fontWeight: FontWeight.w700),
+  ),
   brightness: Brightness.light,
   primaryColor: Colors.indigo,
   colorScheme: ColorScheme.fromSwatch().copyWith(

@@ -2,6 +2,7 @@ import 'package:app_sale_tickets/src/controller/add_ticket_controller.dart';
 import 'package:app_sale_tickets/src/controller/ticket_list_controller.dart';
 import 'package:app_sale_tickets/src/entity/ticket_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 // Importa tu método para enviar el PDF por email
 //import 'package:app_sale_tickets/src/utils/send_pdf_email.dart';
@@ -104,6 +105,7 @@ class _TicketListScreenState extends State<TicketListScreen> {
     super.initState();
   }
 
+  final formatMoney = NumberFormat('#,##0', 'es_CO');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -216,7 +218,8 @@ class _TicketListScreenState extends State<TicketListScreen> {
                             Text('Documento: ${ticket.document}'),
                             Text('Silla: ${ticket.seat}'),
                             Text('Localidad: ${ticket.locality.name}'),
-                            Text('Donación: ${ticket.locality.price}'),
+                            Text(
+                                'Donación: \$${formatMoney.format(ticket.locality.price)}'),
                           ],
                         ),
                         leading: ticket.used == false
