@@ -77,12 +77,20 @@ class AddSaleTicketFirestoreRepository {
 
   Future<void> sendPdfByEmail(List<TicketEntity> tickets) async {
     try {
-      final pdf = await generatePDF(tickets);
-      //downloadFileFromUint8List(pdf, 'Ticket.pdf');
-      await sendMail(
-          email: tickets.first.email,
-          pdfBytes: pdf,
-          fileName: 'Ticket José Ordóñez - ${tickets.first.name}.pdf');
+      const int ticketsByMail = 5;
+
+      for (int i = 0; i < tickets.length; i += ticketsByMail) {
+        final int end = (i + ticketsByMail < tickets.length)
+            ? i + ticketsByMail
+            : tickets.length;
+        final List<TicketEntity> ticketsGroup = tickets.sublist(i, end);
+        final pdf = await generatePDF(ticketsGroup);
+        //downloadFileFromUint8List(pdf, 'Ticket.pdf');
+        await sendMail(
+            email: tickets.first.email,
+            pdfBytes: pdf,
+            fileName: 'Ticket José Ordóñez - ${tickets.first.name}.pdf');
+      }
     } catch (e) {
       throw 'Correo no enviado';
     }
