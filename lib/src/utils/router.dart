@@ -12,12 +12,23 @@ final GoRouter router = GoRouter(
     final loggingIn = state.matchedLocation == '/login';
     final isMap = state.matchedLocation == '/ticketMap';
 
+    // Obtener el parámetro onlyScanner desde el environment o donde lo estés definiendo
+    const onlyScanner = bool.fromEnvironment('onlyScanner');
+
     if (user == null && !loggingIn && !isMap) {
       return '/login';
     }
 
-    if (user != null && loggingIn) {
-      return '/';
+    if (user != null) {
+      if (loggingIn) {
+        // Si onlyScanner es true, redirige a scannerQr, sino a la ruta por defecto
+        return onlyScanner ? '/scannerQr' : '/';
+      }
+
+      // Si onlyScanner es true y no está en scannerQr, redirige a scannerQr
+      if (onlyScanner && state.matchedLocation != '/scannerQr') {
+        return '/scannerQr';
+      }
     }
 
     return null;

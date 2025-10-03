@@ -30,8 +30,8 @@ const Map<int, Map> lettersSeats = {
   7: {
     'letter': 'S',
     'totalSeats': 45,
-    'space': [23, 35],
-    'emptySeats': [12, 13, 35],
+    'space': [23],
+    'emptySeats': [12, 13, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44],
     'locality': {
       0: 'GENERAL',
       1: 'GENERAL',
@@ -83,7 +83,7 @@ const Map<int, Map> lettersSeats = {
     'letter': 'R',
     'totalSeats': 45,
     'space': [23, 35],
-    'emptySeats': [5, 6, 14, 15],
+    'emptySeats': [5, 6, 14, 15, 39, 40, 41, 42, 43, 44],
     'locality': {
       0: 'GENERAL',
       1: 'GENERAL',
@@ -136,7 +136,7 @@ const Map<int, Map> lettersSeats = {
     'letter': 'Q',
     'totalSeats': 45,
     'space': [23, 35],
-    'emptySeats': [0, 14, 15, 23],
+    'emptySeats': [0, 14, 15, 23, 42, 43, 44],
     'locality': {
       1: 'GENERAL',
       2: 'GENERAL',

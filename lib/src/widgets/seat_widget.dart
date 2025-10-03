@@ -70,7 +70,7 @@ class SeatWidget extends StatelessWidget {
     } else if (isReserved && !isUsed) {
       return Colors.black;
     } else if (isReserved && isUsed) {
-      return Colors.white;
+      return const Color(0xFF39FF14);
     } else {
       if (locality == 'VIP') {
         return const Color(0xFFE3E118);

@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "app_sale_tickets",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "app_sale_tickets (scanner mode)",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--dart-define",
+                "onlyScanner=true"
+            ]
+        },
+    ]
+}

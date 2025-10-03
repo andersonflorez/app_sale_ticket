@@ -19,14 +19,14 @@ class ScannerQrController extends ChangeNotifier {
   Future<ScannerQrResponseEntity> markTicketUsed(TicketEntity? ticket) async {
     if (ticket == null || ticket.id.isEmpty) {
       return ScannerQrResponseEntity(
-        message: 'QR no encontrado, inténtalo de nuevo.',
+        message: 'QR no encontrado, inténtalo de nuevo\nNO PERMITIR INGRESO',
         status: ScannerQrResponseStatus.error,
       );
     }
 
     if (ticket.used == true) {
       return ScannerQrResponseEntity(
-        message: 'Código usado anteriormente, Fecha: ${ticket.dateUsed}',
+        message: 'Código usado anteriormente\nNO PERMITIR INGRESO',
         status: ScannerQrResponseStatus.error,
       );
     }
@@ -34,12 +34,12 @@ class ScannerQrController extends ChangeNotifier {
     try {
       await repository.markTicketAsUsed(ticket.id);
       return ScannerQrResponseEntity(
-        message: 'Código correcto.',
+        message: 'Código correcto\nPERMITIR INGRESO',
         status: ScannerQrResponseStatus.success,
       );
     } catch (e) {
       return ScannerQrResponseEntity(
-        message: 'Error inesperado, inténtalo de nuevo.',
+        message: 'Error inesperado, inténtalo de nuevo\nNO PERMITIR INGRESO',
         status: ScannerQrResponseStatus.error,
       );
     }

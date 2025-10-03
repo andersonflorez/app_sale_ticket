@@ -223,11 +223,26 @@ class _TicketListScreenState extends State<TicketListScreen> {
                           ],
                         ),
                         leading: ticket.used == false
-                            ? IconButton(
-                                icon: const Icon(Icons.email),
-                                tooltip: 'Reenviar ticket por correo',
-                                onPressed: () =>
-                                    _confirmAndSendEmail(context, ticket),
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.email),
+                                    tooltip: 'Reenviar ticket por correo',
+                                    onPressed: () =>
+                                        _confirmAndSendEmail(context, ticket),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.download),
+                                    tooltip: 'Descargar Ticket',
+                                    onPressed: () =>
+                                    context
+                        .read<AddTicketController>()
+                        .downloadTicket(ticket),
+                                  ),
+                                ],
                               )
                             : Container(
                                 padding: const EdgeInsets.all(7),

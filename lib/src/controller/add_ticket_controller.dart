@@ -38,4 +38,8 @@ class AddTicketController extends ChangeNotifier {
     ticket.email = newEmail;
     return await repository.updateTicketEmail(ticket);
   }
+
+  Future<String> downloadTicket(TicketEntity ticket) async {
+    return await repository.downloadTicketPdf(ticket);
+  }
 }

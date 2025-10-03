@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:universal_html/html.dart' as html;
 
 class AddSaleTicketFirestoreRepository {
   final _collection = FirebaseFirestore.instance;
@@ -84,8 +85,7 @@ class AddSaleTicketFirestoreRepository {
             ? i + ticketsByMail
             : tickets.length;
         final List<TicketEntity> ticketsGroup = tickets.sublist(i, end);
-        final pdf = await generatePDF(ticketsGroup);
-        //downloadFileFromUint8List(pdf, 'Ticket.pdf');
+        final pdf = await generatePDF(ticketsGroup, true);
         await sendMail(
             email: tickets.first.email,
             pdfBytes: pdf,
@@ -96,13 +96,39 @@ class AddSaleTicketFirestoreRepository {
     }
   }
 
-  /*void downloadFileFromUint8List(Uint8List data, String filename) {
+  Future<String> downloadTicketPdf(TicketEntity ticket) async {
+    try {
+      final pdf = await generatePDF([ticket], false);
+      downloadFileFromUint8List(pdf, 'Ticket ${ticket.seat}.pdf');
+
+      return 'PDF descargado correctamente';
+    } catch (e) {
+      return 'Error al descargar el PDF';
+    }
+  }
+
+  void downloadFileFromUint8List(Uint8List data, String filename) {
     final blob = html.Blob([data], 'application/pdf');
     final url = html.Url.createObjectUrlFromBlob(blob);
-    final html.AnchorElement anchorElement = html.AnchorElement(href: url);
+    /*final html.AnchorElement anchorElement = html.AnchorElement(href: url);
     anchorElement.download = url;
-    anchorElement.click();
-  }*/
+    anchorElement.click();*/
+    // Crear un elemento anchor invisible
+    final anchor = html.document.createElement('a') as html.AnchorElement
+      ..href = url
+      ..style.display = 'none'
+      ..download = filename;
+
+    // Añadir el anchor al documento
+    html.document.body?.children.add(anchor);
+
+    // Simular click para iniciar la descarga
+    anchor.click();
+
+    // Limpiar
+    html.document.body?.children.remove(anchor);
+    html.Url.revokeObjectUrl(url);
+  }
 
   Future<void> sendMail({
     required String email,
@@ -138,7 +164,8 @@ class AddSaleTicketFirestoreRepository {
     }
   }
 
-  Future<Uint8List> generatePDF(List<TicketEntity> tickets) async {
+  Future<Uint8List> generatePDF(
+      List<TicketEntity> tickets, bool includeTermsCondition) async {
     final pdf = pw.Document();
     final fontRegular = pw.Font.ttf(await rootBundle
         .load('assets/fonts/SpaceGrotesk/SpaceGrotesk-Regular.ttf')
@@ -180,16 +207,17 @@ class AddSaleTicketFirestoreRepository {
         ),
       );
     }
-
-    pdf.addPage(
-      pw.MultiPage(
-        theme: theme,
-        pageFormat: PdfPageFormat.a4,
-        build: (pw.Context context) {
-          return buildTermsAndCondition();
-        },
-      ),
-    );
+    if (includeTermsCondition) {
+      pdf.addPage(
+        pw.MultiPage(
+          theme: theme,
+          pageFormat: PdfPageFormat.a4,
+          build: (pw.Context context) {
+            return buildTermsAndCondition();
+          },
+        ),
+      );
+    }
 
     final savedFile = await pdf.save();
     //return List.from(savedFile);
