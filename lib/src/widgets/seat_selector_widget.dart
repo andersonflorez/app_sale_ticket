@@ -24,8 +24,10 @@ class _SeatSelectorWidgetState extends State<SeatSelectorWidget> {
 
   @override
   void initState() {
-    context.read<TicketListController>().listenTickets();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<TicketListController>().listenTickets();
+    });
   }
 
   @override
@@ -38,7 +40,7 @@ class _SeatSelectorWidgetState extends State<SeatSelectorWidget> {
       scrollDirection: Axis.horizontal,
       child: Consumer<TicketListController>(
         builder: (context, controller, child) {
-          if (controller.listening == false) {
+          if (controller.loading == true) {
             return const Center(
               child: CircularProgressIndicator(),
             );

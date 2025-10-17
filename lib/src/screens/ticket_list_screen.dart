@@ -189,7 +189,7 @@ class _TicketListScreenState extends State<TicketListScreen> {
                       matchesSeat;
                 }).toList();
 
-                if (controller.listening == false) {
+                if (controller.loading == true) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
@@ -237,10 +237,9 @@ class _TicketListScreenState extends State<TicketListScreen> {
                                   IconButton(
                                     icon: const Icon(Icons.download),
                                     tooltip: 'Descargar Ticket',
-                                    onPressed: () =>
-                                    context
-                        .read<AddTicketController>()
-                        .downloadTicket(ticket),
+                                    onPressed: () => context
+                                        .read<AddTicketController>()
+                                        .downloadTicket(ticket),
                                   ),
                                 ],
                               )

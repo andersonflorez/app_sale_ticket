@@ -9,7 +9,7 @@ class AddTicketController extends ChangeNotifier {
   List<LocalityEntity> localities = [];
   List<String> reservedSeats = [];
 
-  bool isLoading = false;
+  bool isLoading = true;
 
   AddTicketController({required this.repository});
 

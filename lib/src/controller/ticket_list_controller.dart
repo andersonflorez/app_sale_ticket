@@ -7,23 +7,21 @@ class TicketListController extends ChangeNotifier {
   final ListenTicketsFirestoreRepository repository;
 
   List<TicketEntity> tickets = [];
-
-  bool listening = false;
-
+  bool loading = true;
   TicketListController({required this.repository});
 
   Future<void> listenTickets() async {
-    if (listening == false) {
-      repository
-          .listenTickets()
-          .listen((QuerySnapshot<Map<String, dynamic>> list) {
-        listening = true;
-        tickets = list.docs
-            .map((doc) => TicketEntity.fromMap(doc.id, doc.data()))
-            .toList();
+    loading = true;
+    notifyListeners();
 
-        notifyListeners();
-      });
-    }
+    final QuerySnapshot<Map<String, dynamic>> list =
+        await repository.listenTickets();
+
+    tickets = list.docs
+        .map((doc) => TicketEntity.fromMap(doc.id, doc.data()))
+        .toList();
+
+    loading = false;
+    notifyListeners();
   }
 }
